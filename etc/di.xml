@@ -27,4 +27,9 @@
                 sortOrder="100"
                 disabled="false"/>
     </type>
+    <type name="Magento\Framework\App\Config\ScopeConfigInterface">
+        <plugin name="Shkoliar_Ngrok_CookieDomain"
+                type="Shkoliar\Ngrok\Plugin\App\Config\CookieDomain"
+                sortOrder="10"/>
+    </type>
 </config>
