@@ -13,7 +13,7 @@ class Ngrok extends \Magento\Framework\App\Helper\AbstractHelper
     const SCHEME_HTTP  = 'http';
     const SCHEME_HTTPS = 'https';
 
-    const NGROK_DOMAIN = '.ngrok.io';
+    const NGROK_DOMAINS =  ['.ngrok.io', '.ngrok-free.app', 'ngrok-free.dev', 'ngrok.app', '.ngrok.dev'];
 
     const HTTP_X_FORWARDED_PROTO = 'HTTP_X_FORWARDED_PROTO';
 
@@ -36,15 +36,23 @@ class Ngrok extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getDomain()
     {
-        $ngrokDomain = $this->getServer('HTTP_X_ORIGINAL_HOST') ?: $this->getServer('HTTP_HOST');
+        $ngrokDomain = $this->getServer('HTTP_X_FORWARDED_HOST')
+            ?: $this->getServer('HTTP_X_ORIGINAL_HOST')
+            ?: $this->getServer('HTTP_HOST');
 
-        return stripos($ngrokDomain, self::NGROK_DOMAIN) !== false ? $ngrokDomain : false;
+        /** Cover multiple new ngrok domains */
+        foreach (self::NGROK_DOMAINS as $domain) {
+            if (stripos($ngrokDomain, $domain) !== false) {
+                return $ngrokDomain;
+            }
+        }
+        return false;
     }
 
     /**
     * Fix PHP 8.1
-    * return bool 
-    */   
+    * return bool
+    */
     public function IsNgrokDomain() : bool
     {
         return $this->getDomain() != false ? true : false;
