@@ -39,5 +39,10 @@
                 sortOrder="100"
                 disabled="false"/>
     </type>
+    <type name="Magento\Backend\App\Area\FrontNameResolver">
+        <plugin name="shkoliar-ngrok-backend-frontnameresolver-plugin"
+                type="Shkoliar\Ngrok\Plugin\App\Area\FrontNameResolverValue"
+                sortOrder="100"
+                disabled="false"/>
+    </type>
 </config>
-
