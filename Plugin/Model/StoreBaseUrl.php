@@ -41,20 +41,21 @@ class StoreBaseUrl
     public function afterGetBaseUrl(Store $subject, $result)
     {
         if($this->ngrok->IsNgrokDomain()){
+            $result = str_replace('index.php/', '', $result);
 
             $ngrokDomain = $this->ngrok->getDomain();
-            
+
             $defaultBaseUrls = [
                 $subject->getConfig($subject::XML_PATH_SECURE_BASE_URL),
                 $subject->getConfig($subject::XML_PATH_UNSECURE_BASE_URL)
             ];
-    
+
             if (in_array($result, $defaultBaseUrls)) {
                 $protocol = $this->ngrok->getProtocol();
-    
+
                 return $protocol . $ngrokDomain . DIRECTORY_SEPARATOR;
             }
-        
+
 
             /* Media URL Base */
             $mediaBaseUrls = [
@@ -88,6 +89,6 @@ class StoreBaseUrl
      */
     public function afterIsUrlSecure(Store $subject, $result)
     {
-        return $this->ngrok->IsNgrokDomain() == true ? 0 : $result; 
+        return $this->ngrok->IsNgrokDomain() == true ? 0 : $result;
     }
 }
